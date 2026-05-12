@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Cue Card: Etika Profesi (Full Text HUD Edition)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Poppins"', "sans-serif"],
+              display: ['"Orbitron"', "sans-serif"],
+            },
+            colors: {
+              cyber: {
+                bg: "#020307",
+                panel: "#0b1021",
+                cyan: "#00f3ff",
+                purple: "#9d4edd",
+                rose: "#f43f5e",
+                amber: "#f59e0b",
+                emerald: "#10b981",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #020307;
+        background-image:
+          linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+        background-size: 20px 20px;
+        color: #e2e8f0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #cue-card-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: rgba(2, 3, 7, 0.95);
+        min-height: 100vh;
+        position: relative;
+        box-shadow: 0 0 50px rgba(0, 243, 255, 0.05);
+        border-left: 1px solid rgba(0, 243, 255, 0.15);
+        border-right: 1px solid rgba(0, 243, 255, 0.15);
+        overflow-x: hidden;
+        padding-bottom: 100px;
+      }
+
+      ::-webkit-scrollbar {
+        width: 3px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #020307;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #00f3ff;
+        border-radius: 10px;
+      }
+
+      /* Fitur Fokus Aktif */
+      .readable-block {
+        transition: all 0.4s ease;
+        opacity: 0.5;
+        transform: scale(0.98);
+      }
+      .readable-block.active-focus {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 25px rgba(0, 243, 255, 0.1);
+      }
+
+      .glass-panel {
+        background: rgba(11, 16, 33, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 243, 255, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .speech-box {
+        background: linear-gradient(145deg, #0b1021 0%, #05070f 100%);
+        border-left: 4px solid var(--color-cyber-cyan);
+        padding: 20px;
+        border-radius: 0 12px 12px 0;
+        position: relative;
+      }
+
+      .text-reading {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #f8fafc;
+        margin-bottom: 15px;
+      }
+
+      .highlight-cyan {
+        color: #00f3ff;
+        font-weight: 700;
+        text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+      }
+      .highlight-rose {
+        color: #f43f5e;
+        font-weight: 700;
+        text-shadow: 0 0 8px rgba(244, 63, 94, 0.4);
+      }
+      .highlight-amber {
+        color: #f59e0b;
+        font-weight: 700;
+        text-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+      }
+      .highlight-emerald {
+        color: #10b981;
+        font-weight: 700;
+        text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+      }
+
+      .section-marker {
+        display: flex;
+        align-items: center;
+        margin: 50px 0 30px 0;
+        gap: 15px;
+        position: sticky;
+        top: 60px;
+        z-index: 40;
+        background: rgba(2, 3, 7, 0.9);
+        padding: 10px 0;
+        backdrop-filter: blur(5px);
+      }
+      .section-marker .line {
+        flex-grow: 1;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(0, 243, 255, 0.8), transparent);
+      }
+      .section-marker h2 {
+        font-family: "Orbitron", sans-serif;
+        font-size: 20px;
+        font-weight: 900;
+        color: #00f3ff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 0;
+        text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+      }
+
+      .timeline-line {
+        position: absolute;
+        left: 28px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: rgba(0, 243, 255, 0.15);
+        z-index: 0;
+      }
+      .step-container {
+        position: relative;
+        padding-left: 60px;
+        margin-bottom: 30px;
+        z-index: 1;
+      }
+      .step-icon {
+        position: absolute;
+        left: 12px;
+        top: 15px;
+        width: 34px;
+        height: 34px;
+        background: #020307;
+        border: 2px solid #00f3ff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #00f3ff;
+        font-size: 14px;
+        box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+      }
+
+      .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(2, 3, 7, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(0, 243, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cue-card-container">
+      <div class="sticky-header">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-3 h-3 bg-rose-500 rounded-full animate-pulse shadow-[0_0_10px_#f43f5e]"
+          ></div>
+          <span
+            class="font-display font-bold text-cyber-cyan tracking-widest text-sm"
+            >HUD ACTIVE</span
+          >
+        </div>
+        <div
+          class="text-xs text-cyber-cyan font-bold bg-cyber-cyan/10 px-3 py-1 rounded border border-cyber-cyan/30 font-display"
+        >
+          MAULANA.A.Z
+        </div>
+      </div>
+
+      <div
+        class="px-6 pt-12 pb-8 text-center relative overflow-hidden border-b border-cyber-cyan/20"
+      >
+        <h1
+          class="font-display font-black text-4xl text-white leading-tight mb-3 relative z-10 text-shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+        >
+          ETIKA PROFESI<br />
+          <span
+            class="text-cyber-cyan"
+            style="text-shadow: 0 0 20px rgba(0, 243, 255, 0.5)"
+            >PRAKTEK NYATA</span
+          >
+        </h1>
+        <p
+          class="text-slate-400 text-sm tracking-widest uppercase font-bold relative z-10 font-display"
+        >
+          Full Text Script HUD (Scroll to Focus)
+        </p>
+      </div>
+
+      <div class="px-5 relative">
+        <div class="timeline-line"></div>
+
+        <div class="section-marker px-2">
+          <i class="fa-solid fa-play text-cyber-cyan"></i>
+          <h2>1. PEMBUKAAN & LATAR BELAKANG</h2>
+          <div class="line"></div>
+        </div>
+
+        <div class="step-container">
+          <div class="step-icon"><i class="fa-solid fa-comment-dots"></i></div>
+          <div class="speech-box readable-block">
+            <p class="text-reading italic">
+              "Assalamualaikum Wr. Wb. Selamat pagi Ibu Erly dan teman-teman
+              semua."
+            </p>
+            <p class="text-reading">
+              "Tokoh pemikir
+              <span class="highlight-amber">C.S. Lewis</span> pernah berkata:
+              <br /><span class="highlight-cyan"
+                >'Integritas adalah melakukan hal yang benar, bahkan ketika
+                tidak ada satu pun orang yang melihat.'</span
+              >"
+            </p>
+            <div
+              class="bg-rose-500/10 border border-rose-500/50 p-4 rounded-lg mt-4 mb-2"
+            >
+              <p
+                class="text-sm text-rose-400 font-bold uppercase tracking-wider mb-2 font-display"
+              >
+                <i class="fa-solid fa-bolt"></i> Tes Etika Dasar
+              </p>
+              <p class="text-reading m-0">
+                "Sebelum kita jauh membahas integritas teknisi saat memegang
+                nyawa pasien sendirian di ruang alat,
+                <span class="highlight-rose"
+                  >mari kita tes etika paling dasar dulu di ruangan yang ramai
+                  ini...</span
+                >
+                yaitu etika menghargai dan mendengarkan rekan yang sedang
+                berbicara di depan."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-container">
+          <div class="step-icon"><i class="fa-solid fa-stethoscope"></i></div>
+          <div class="glass-panel readable-block">
+            <p class="text-reading">
+              "Pernahkah teman-teman membayangkan, apa jadinya jika sebuah alat
+              pacu jantung yang seharusnya menyelamatkan nyawa,
+              <span class="highlight-rose"
+                >justru berakibat fatal hanya karena teknisinya berbohong soal
+                data kalibrasi?</span
+              >"
+            </p>
+            <p class="text-reading">
+              "Profesi Elektromedis ini sangat unik dan
+              <span class="highlight-cyan">selevel dengan profesi Dokter</span>.
+              Bedanya, dokter menyelamatkan pasien dengan obat dan pisau bedah,
+              sedangkan kita menyelamatkan nyawa mereka melalui presisi
+              alat-alat yang kita kalibrasi."
+            </p>
+            <p class="text-reading m-0">
+              "Di bidang kita, skill teknis yang hebat
+              <span class="highlight-rose"
+                >nilainya NOL jika tidak dibarengi etika</span
+              >. Jika moral dan etika kita hilang—sekecil apa pun itu—nyawa
+              pasien langsung menjadi taruhannya. Itulah mengapa, Etika adalah
+              kompas utama kita."
+            </p>
+          </div>
+        </div>
+
+        <div class="section-marker px-2">
+          <i class="fa-solid fa-list-check text-cyber-cyan"></i>
+          <h2>2. 6 PRINSIP & ANALOGI</h2>
+          <div class="line"></div>
+        </div>
+
+        <div class="step-container">
+          <div class="step-icon"><i class="fa-solid fa-microphone"></i></div>
+          <div class="speech-box border-l-cyber-purple readable-block">
+            <p class="text-reading">
+              "Di layar ada 6 prinsip utama. Tapi jangan dihafal, mari kita
+              resapi. Ujung-ujungnya, keenam hal ini mengerucut pada satu titik:
+              <span class="highlight-rose">Nyawa Pasien</span>."
+            </p>
+
+            <p class="text-reading">
+              <span class="highlight-purple font-display text-lg uppercase"
+                >Tanggung Jawab & Integritas:</span
+              ><br />"Mari kita ambil contoh prinsip Tanggung Jawab. Bayangkan
+              saat kita mengerjakan tugas kuliah: kita riset, buat kerangka,
+              double-crosscheck, lalu kumpulkan tepat waktu. Ada proses
+              terstruktur."
+            </p>
+            <p class="text-reading">
+              "Di rumah sakit, wujudnya adalah pemeliharaan alat rutin.
+              <span class="highlight-rose"
+                >Jika kita memotong alur tersebut—sama seperti membuat tugas
+                asal copy-paste—</span
+              >maka alat itu bisa tiba-tiba mati saat sedang memompa napas
+              pasien."
+            </p>
+
+            <div class="w-full h-px bg-cyber-purple/30 my-4"></div>
+
+            <p class="text-reading">
+              <span class="highlight-purple font-display text-lg uppercase"
+                >Keadilan:</span
+              ><br />"Kita menyervis alat di ruang Kelas 3 dengan ketelitian
+              yang sama persis seperti di ruang VVIP.
+              <span class="highlight-amber"
+                >Nyawa tidak mengenal kelas ekonomi.</span
+              >"
+            </p>
+
+            <div class="w-full h-px bg-cyber-purple/30 my-4"></div>
+
+            <p class="text-reading">
+              <span class="highlight-purple font-display text-lg uppercase"
+                >Kejujuran:</span
+              ><br />"Laporkan alat apa adanya. Jika rusak, katakan rusak.
+              <span class="highlight-cyan"
+                >Jangan memanipulasi fakta lapangan.</span
+              >"
+            </p>
+
+            <div class="w-full h-px bg-cyber-purple/30 my-4"></div>
+
+            <p class="text-reading">
+              <span class="highlight-purple font-display text-lg uppercase"
+                >Kerahasiaan:</span
+              ><br />"Tutup mulut soal riwayat penyakit pasien yang terlihat di
+              layar alat medis seperti Patient Monitor."
+            </p>
+
+            <div class="w-full h-px bg-cyber-purple/30 my-4"></div>
+
+            <p class="text-reading m-0">
+              <span class="highlight-purple font-display text-lg uppercase"
+                >Kompetensi:</span
+              ><br />"Terus belajar.
+              <span class="highlight-rose"
+                >Kebodohan kita saat menservis alat baru justru akan
+                membahayakan pasien.</span
+              >"
+            </p>
+          </div>
+        </div>
+
+        <div class="section-marker px-2">
+          <i class="fa-solid fa-triangle-exclamation text-cyber-cyan"></i>
+          <h2>3. REALITA, SOLUSI & PENERAPAN</h2>
+          <div class="line"></div>
+        </div>
+
+        <div class="step-container">
+          <div class="step-icon border-rose-500 text-rose-500">
+            <i class="fa-solid fa-skull-crossbones"></i>
+          </div>
+          <div
+            class="glass-panel border-rose-500/50 bg-rose-950/10 readable-block"
+          >
+            <p class="text-reading">
+              "Saat kita turun PBL kemarin, mungkin kita pernah berpapasan
+              langsung dengan dilema di lapangan. Kita melihat praktik janggal,
+              tapi diam dengan asas 'praduga tak bersalah'."
+            </p>
+
+            <p class="text-reading">
+              <span class="highlight-rose">Tapi lihat realita pahit ini.</span>
+              Akar masalah pelanggaran seringkali dipicu oleh kurangnya
+              pemahaman etika, tekanan beban kerja, dan lemahnya pengawasan di
+              lapangan."
+            </p>
+
+            <ul class="list-none p-0 m-0 space-y-4 mt-4">
+              <li class="flex gap-3">
+                <i class="fa-solid fa-xmark text-rose-500 mt-1 text-xl"></i>
+                <p class="text-reading m-0">
+                  <span class="highlight-amber"
+                    >Banyak teknisi memalsukan stiker kalibrasi,</span
+                  >
+                  menempel stiker 'Lulus' padahal alat tidak diuji secara fisik
+                  dan fungsi, hanya karena malas.
+                </p>
+              </li>
+              <li class="flex gap-3">
+                <i class="fa-solid fa-xmark text-rose-500 mt-1 text-xl"></i>
+                <p class="text-reading m-0">
+                  Atau praktik
+                  <span class="highlight-amber">'Kanibal Alat'</span>—mencabut
+                  sparepart dari alat rusak untuk dipasang ke alat lain tanpa
+                  standar keamanan yang jelas.
+                </p>
+              </li>
+            </ul>
+            <p
+              class="text-reading font-bold text-rose-400 mt-5 text-center italic"
+            >
+              "Kelalaian-kelalaian kecil ini adalah bom waktu pembunuh pasien."
+            </p>
+          </div>
+        </div>
+
+        <div class="step-container">
+          <div class="step-icon"><i class="fa-solid fa-shield-virus"></i></div>
+          <div class="glass-panel border-cyber-cyan/50 readable-block">
+            <p class="text-reading">
+              "Lalu, apakah dibiarkan? Tentu tidak.
+              <span class="highlight-cyan">Solusinya harus sistemik.</span>"
+            </p>
+            <p class="text-reading">
+              "Mulai dari edukasi orangnya, sistem audit pengawasan yang ketat,
+              hingga sanksi tegas berupa pemecatan bagi pemalsu data medis, dan
+              Sistem Pelaporan (Whistleblowing) yang aman."
+            </p>
+          </div>
+        </div>
+
+        <div class="step-container">
+          <div class="step-icon border-amber-500 text-amber-500">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div
+            class="speech-box border-l-amber-500 bg-amber-950/10 readable-block"
+          >
+            <p class="text-reading">
+              "Sebagai calon Ahli Elektromedis, mari berjanji: Jadikan sisi
+              gelap PBL sebagai contoh buruk. Prinsip absolut kita:
+              <span class="highlight-amber"
+                >NON-MALEFICENCE. Jangan bahayakan pasien.</span
+              >"
+            </p>
+
+            <div class="w-full h-px bg-amber-500/30 my-4"></div>
+
+            <p class="text-reading">
+              "Penerapan nyatanya mencakup
+              <span class="highlight-amber"
+                >dokumentasi pekerjaan yang jelas dan akurat</span
+              >. Mengisi buku logbook perbaikan secara rinci bukanlah sekadar
+              rutinitas, melainkan
+              <span class="highlight-cyan"
+                >bukti hukum yang sah dan penyelamat karir Anda</span
+              >
+              apabila terjadi malfungsi tak terduga di kemudian hari."
+            </p>
+
+            <p class="text-reading m-0">
+              "Selain itu, sikap profesional dalam bekerja sama dengan tim medis
+              sangat krusial.
+              <span class="highlight-rose"
+                >Jangan gengsi berkoordinasi dan berkomunikasi aktif dengan
+                perawat atau dokter</span
+              >
+              saat alat bermasalah, agar pelayanan pasien tidak terganggu."
+            </p>
+          </div>
+        </div>
+
+        <div class="section-marker px-2">
+          <i class="fa-solid fa-flag-checkered text-cyber-cyan"></i>
+          <h2>4. CLOSING STATEMENT</h2>
+          <div class="line"></div>
+        </div>
+
+        <div class="step-container">
+          <div class="step-icon">
+            <i class="fa-solid fa-microphone-lines"></i>
+          </div>
+          <div
+            class="speech-box border-l-emerald-500 text-center readable-block"
+          >
+            <p
+              class="text-reading font-display text-2xl font-bold highlight-amber"
+            >
+              "Teman-teman, jika kita tidak mulai membangun etika dari detik
+              ini, lalu kapan lagi?"
+            </p>
+            <p class="text-reading">
+              "Mungkin kalian bertanya-tanya, kenapa di awal tadi saya sangat
+              tegas mengatakan bahwa 'wujud paling dasar dari etika adalah
+              mendengarkan'? Alasannya sederhana."
+            </p>
+            <p class="text-reading">
+              "Karena semua bekal ilmu yang kelak akan kita pakai untuk
+              menyelamatkan nyawa pasien, berasal dari mereka yang berdiri di
+              depan kelas ini—<span class="highlight-cyan text-xl"
+                >para Dosen, orang tua kedua kita.</span
+              >"
+            </p>
+            <p class="text-reading">
+              "Dan mari kita ingat satu hal:
+              <span class="highlight-amber"
+                >roda waktu akan terus berputar.</span
+              >
+              Suatu saat nanti, kitalah yang akan berdiri sebagai seorang
+              profesional, menjelaskan prosedur kepada pasien, atau menjadi
+              pembicara di depan yang juga membutuhkan orang lain untuk
+              mendengarkan dan menghargai kita. Jadi, mari kita mulai praktikkan
+              etika itu dari ruang kelas ini."
+            </p>
+            <p class="text-reading font-bold mt-6 tracking-wide text-white">
+              "Terima kasih atas perhatiannya.<br />Wassalamualaikum
+              warahmatullahi wabarakatuh."
+            </p>
+          </div>
+        </div>
+
+        <div class="section-marker px-2 mt-16">
+          <i
+            class="fa-solid fa-bolt text-cyber-amber"
+            style="color: #f59e0b"
+          ></i>
+          <h2
+            style="
+              color: #f59e0b;
+              text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            "
+          >
+            SENJATA RAHASIA (Q&A FULL TEXT)
+          </h2>
+          <div
+            class="line"
+            style="
+              background: linear-gradient(
+                90deg,
+                rgba(245, 158, 11, 0.8),
+                transparent
+              );
+            "
+          ></div>
+        </div>
+
+        <div class="step-container">
+          <div
+            class="step-icon border-emerald-500 text-emerald-500 bg-emerald-950/50"
+          >
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+          <div class="space-y-5">
+            <div
+              class="bg-emerald-900/40 p-3 text-center rounded-lg border border-emerald-500/50 readable-block"
+            >
+              <span
+                class="text-emerald-400 font-display font-bold tracking-widest text-sm uppercase"
+                >Bagian 1: Konsep Makalah Lengkap</span
+              >
+            </div>
+
+            <div class="glass-panel border-emerald-500/40 readable-block">
+              <p class="text-emerald-400 text-sm font-display mb-2 font-bold">
+                Q1: Sebutkan enam prinsip utama etika profesi yang wajib
+                dipegang teguh!
+              </p>
+              <p class="text-reading m-0">
+                "Enam prinsip utama tersebut adalah tanggung jawab, kejujuran,
+                keadilan, kerahasiaan, kompetensi, dan integritas."
+              </p>
+            </div>
+
+            <div class="glass-panel border-emerald-500/40 readable-block">
+              <p class="text-emerald-400 text-sm font-display mb-2 font-bold">
+                Q2: Mengapa bidang elektromedis sangat membutuhkan penerapan
+                etika profesi yang ketat?
+              </p>
+              <p class="text-reading m-0">
+                "Karena bidang elektromedis berkaitan langsung dengan
+                <span class="highlight-emerald"
+                  >alat kesehatan yang digunakan untuk diagnosis dan perawatan
+                  pasien,</span
+                >
+                sehingga kesalahan dalam penggunaan atau perawatan alat dapat
+                membahayakan nyawa pasien."
+              </p>
+            </div>
+
+            <div class="glass-panel border-emerald-500/40 readable-block">
+              <p class="text-emerald-400 text-sm font-display mb-2 font-bold">
+                Q3: Apa saja bentuk pelanggaran etika yang sering terjadi dalam
+                praktik nyata?
+              </p>
+              <p class="text-reading m-0">
+                "Bentuk pelanggarannya meliputi ketidakjujuran (memalsukan
+                data),
+                <span class="highlight-rose"
+                  >penyalahgunaan wewenang (menerima suap)</span
+                >, membocorkan rahasia data pribadi, diskriminasi, serta
+                kurangnya rasa tanggung jawab."
+              </p>
+            </div>
+
+            <div class="glass-panel border-emerald-500/40 readable-block">
+              <p class="text-emerald-400 text-sm font-display mb-2 font-bold">
+                Q4: Apa konsekuensi jika seorang teknisi lalai melakukan
+                pengecekan/kalibrasi?
+              </p>
+              <p class="text-reading m-0">
+                "Kelalaian tersebut dapat menyebabkan hasil alat tidak akurat,
+                kesalahan diagnosis, dan
+                <span class="highlight-emerald"
+                  >melanggar prinsip non-maleficence (tidak membahayakan)</span
+                >
+                karena berisiko membahayakan nyawa pasien."
+              </p>
+            </div>
+
+            <div class="glass-panel border-emerald-500/40 readable-block">
+              <p class="text-emerald-400 text-sm font-display mb-2 font-bold">
+                Q5: Apa saja solusi untuk mencegah terjadinya pelanggaran etika
+                profesi?
+              </p>
+              <p class="text-reading m-0">
+                "Solusinya meliputi peningkatan pendidikan dan pelatihan etika,
+                penerapan standar operasional prosedur (SOP) yang konsisten,
+                <span class="highlight-emerald"
+                  >penguatan sistem pengawasan (audit)</span
+                >, pemberian sanksi tegas, serta membangun budaya kerja yang
+                etis."
+              </p>
+            </div>
+
+            <div class="glass-panel border-emerald-500/40 readable-block">
+              <p class="text-emerald-400 text-sm font-display mb-2 font-bold">
+                Q6: Mengapa dokumentasi pekerjaan yang jelas dianggap penting?
+              </p>
+              <p class="text-reading m-0">
+                "Dokumentasi yang baik memudahkan proses evaluasi serta menjadi
+                <span class="highlight-amber">bukti yang sah</span> apabila
+                terjadi masalah atau kendala hukum di kemudian hari."
+              </p>
+            </div>
+
+            <div class="glass-panel border-emerald-500/40 readable-block">
+              <p class="text-emerald-400 text-sm font-display mb-2 font-bold">
+                Q7: Apa yang dimaksud dengan prinsip kompetensi?
+              </p>
+              <p class="text-reading m-0">
+                "Prinsip kompetensi berarti tenaga kerja harus bekerja sesuai
+                kemampuan, terus belajar mengikuti perkembangan teknologi alat
+                kesehatan, dan
+                <span class="highlight-rose"
+                  >tidak bekerja di luar batas pengetahuannya</span
+                >
+                karena dapat menimbulkan risiko besar."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-container mt-12">
+          <div
+            class="step-icon border-amber-500 text-amber-500 bg-amber-950/50"
+          >
+            <i class="fa-solid fa-fire"></i>
+          </div>
+          <div class="space-y-5">
+            <div
+              class="bg-amber-900/40 p-3 text-center rounded-lg border border-amber-500/50 readable-block"
+            >
+              <span
+                class="text-amber-400 font-display font-bold tracking-widest text-sm uppercase"
+                >Bagian 2: Dilema Lapangan (HOTS)</span
+              >
+            </div>
+
+            <div class="glass-panel border-amber-500/50 readable-block">
+              <h3 class="font-display font-bold text-amber-400 text-base mb-2">
+                1. Bahaya Stiker Palsu?
+              </h3>
+              <p class="text-reading m-0">
+                "Izin menanggapi. Menempel stiker 'Lulus Kalibrasi' tanpa
+                menguji alat ibarat melompati prosedur keamanan vital.
+                <span class="highlight-rose"
+                  >Stiker itu bukan sekadar formalitas, stiker itu adalah
+                  jaminan nyawa.</span
+                >
+                Jika alat ternyata rusak namun dokter terlanjur percaya pada
+                stiker kita, hasil diagnosis akan salah total dan berujung pada
+                hilangnya nyawa pasien."
+              </p>
+            </div>
+
+            <div class="glass-panel border-amber-500/50 readable-block">
+              <h3 class="font-display font-bold text-amber-400 text-base mb-2">
+                2. Contoh Non-maleficence?
+              </h3>
+              <p class="text-reading m-0">
+                "Izin menjawab. Pelanggaran akar masalahnya bisa bermula sejak
+                kita masih mahasiswa. Jika kita tidak beretika dalam proses
+                belajar—malas mendalami materi—kita akan lulus menjadi teknisi
+                yang tidak kompeten.
+                <span class="highlight-cyan"
+                  >Berani menyentuh alat medis kritis tanpa kompetensi yang
+                  memadai</span
+                >
+                adalah wujud nyata pelanggaran prinsip 'tidak membahayakan'."
+              </p>
+            </div>
+
+            <div
+              class="glass-panel border-rose-500/60 bg-rose-950/20 shadow-[0_0_20px_rgba(244,63,94,0.15)] readable-block"
+            >
+              <h3 class="font-display font-bold text-rose-400 text-base mb-2">
+                <i class="fa-solid fa-siren-on animate-pulse mr-2"></i>3.
+                Dilema: Alat Rusak vs Nyawa
+              </h3>
+              <p class="text-reading mb-3">
+                "Langkah pertama: bergerak taktis dan sinkronisasi mencari alat
+                cadangan di ruang aset. Jika benar-benar sisa satu itu saja di
+                dunia pada detik itu,
+                <span class="highlight-amber"
+                  >prinsip Beneficence (menyelamatkan nyawa) mengambil
+                  alih.</span
+                >
+                Alat tetap dipakaikan..."
+              </p>
+              <p
+                class="text-reading m-0 text-white bg-rose-600/40 p-3 rounded font-bold border border-rose-500"
+              >
+                "TETAPI SYARAT MUTLAK: Teknisi elektromedis tidak boleh
+                meninggalkan ruangan. Kami wajib standby memantau fluktuasi alat
+                secara manual di samping pasien hingga tuntas!"
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Fitur "Live Focus Tracking" HUD
+      // Menyalakan block teks yang sedang berada di tengah layar untuk membantu presenter membaca
+      document.addEventListener("DOMContentLoaded", () => {
+        const blocks = document.querySelectorAll(".readable-block");
+
+        // Buat observer
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                // Nyalakan elemen yang masuk area tengah
+                entry.target.classList.add("active-focus");
+              } else {
+                // Redupkan yang keluar area
+                entry.target.classList.remove("active-focus");
+              }
+            });
+          },
+          {
+            // Area trigger: aktif saat elemen masuk di antara 30% dari atas sampai 30% dari bawah layar HP
+            rootMargin: "-30% 0px -30% 0px",
+            threshold: 0,
+          },
+        );
+
+        blocks.forEach((block) => {
+          observer.observe(block);
+        });
+      });
+    </script>
+  </body>
+</html>
